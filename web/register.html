@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kopi</title>
+    <meta name="description" content="Login - Register Template">
+    <meta name="author" content="Lorenzo Angelino aka MrLolok">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #303641;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container-register">
+        <div id="title">
+            <i class="material-icons lock">lock</i> Register
+        </div>
+
+        <form id="register_form">
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">email</i>
+                </div>
+                <input id="email_id" placeholder="Email" type="email" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">vpn_key</i>
+                </div>
+                <input id="password" placeholder="Password" type="password" required class="validate" autocomplete="off">
+            </div>
+
+            <div style="margin: 20px 0"></div>
+
+            <input type="submit" value="Register" />
+        </form>
+
+        <div class="register">
+            Do you already have an account?
+            <a href="./login.html"><button id="register-link">Log In here</button></a>
+        </div>
+    </div>
+
+    <script>
+          $("#register_form").submit(function(e) {
+               e.preventDefault();
+               var email_id = $('#email_id').val();
+               var password = $('#password').val();
+               console.log(email_id+password);
+               //make ajax call to kopi server to create user and if valid, reload to homepage.html updating the clip_content & local storage
+          });
+    </script>
+</body>
+
+</html>
