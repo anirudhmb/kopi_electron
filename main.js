@@ -1,9 +1,13 @@
 const { app, BrowserWindow } = require('electron');
 const clipboardWatcher = require('electron-clipboard-watcher');
 const Store = require('electron-store');
-const { ipcMain } = require('electron');
+const io = require("socket.io-client");
+var config = require('./config/config.js');
+const { clipboard } = require('electron');
+const {ipcMain} = require('electron');
 
 const store = new Store();
+const ioClient = io.connect(config.socket_url);
 
 let win = null;
 
@@ -16,9 +20,20 @@ const watcher = clipboardWatcher({
        console.log('text changed');
        console.log(text);
 
+       ioClient.emit('new_private_message',{email:store.get('email_id'), clip_content:text});
        win.webContents.send('clip-changed', text);
   }
 })
+
+function connect_socket(){
+     console.log('socket initialization '+ store.get('email_id'));
+     ioClient.emit('privatechatroom', {email:store.get('email_id')});
+}
+
+function disconnect_socket(){
+     console.log('disconnect socket '+store.get('email_id'));
+     ioClient.emit('leavechatroom', {email:store.get('email_id')});
+}
 
 function createWindow () {
      console.log(process.platform)
@@ -32,17 +47,17 @@ function createWindow () {
     skipTaskbar: true,
     resizable: false
   })
-  //console.log(app.getPath('userData'));
-
+  
   //if user is logged in
   if(store.get('isAuthenticated') == 'true'){
       console.log('already logged in');
+      connect_socket();
+      win.loadFile('web/homepage.html');
  } else {
       console.log('not logged in');
+      win.loadFile('web/login.html');
  }
 
-  // and load the index.html of the app.
-  win.loadFile('web/login.html')
 
   win.webContents.openDevTools()
 
@@ -75,3 +90,16 @@ app.on('activate', () => {
 if(process.platform == "darwin"){
           app.dock.hide()
 }
+
+ioClient.on('updated_clip_content', function (msg) {
+           console.log("chat room msg "+msg.clip_content);
+           clipboard.writeText(msg.clip_content);
+});
+
+ipcMain.on('connect', (event, arg) => {
+     connect_socket();
+})
+
+ipcMain.on('disconnect', (event, arg) => {
+     disconnect_socket();
+})

@@ -2,6 +2,8 @@ var config = require('../config/config.js');
 window.$ = window.jQuery = require('jquery');
 const axios = require('axios');
 const Store = require('electron-store');
+const store = new Store();
+const { ipcRenderer } = require('electron');
 
 $("#login_form").submit(function(e) {
      e.preventDefault();
@@ -15,6 +17,9 @@ $("#login_form").submit(function(e) {
      .then(function (response) {
           console.log(response.data);
           if(response.status==200 && response.data=="{status:login_success}"){
+               store.set('email_id', email_id);
+               store.set('isAuthenticated', "true");
+               ipcRenderer.send('connect');
                window.location.href="../web/homepage.html";
           }
           if(response.status==200 && response.data=="{status:invalid_credentials}"){

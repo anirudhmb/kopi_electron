@@ -17,6 +17,9 @@ $("#register_form").submit(function(e) {
      .then(function (response) {
           console.log(response.data);
           if(response.status==200 && response.data=="{status:success}"){
+               store.set('email_id', email_id);
+               store.set('isAuthenticated', true);
+               ipcRenderer.send('connect');
                window.location.href="../web/homepage.html";
           }
      })
