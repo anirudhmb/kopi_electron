@@ -1,7 +1,7 @@
 var config = {};
 
-config.login_url = "http://localhost:3000/login";
-config.registration_url = "http://localhost:3000/signup";
-config.socket_url = "http://localhost:8000";
+config.login_url = "https://kopi-server.herokuapp.com/login";
+config.registration_url = "https://kopi-server.herokuapp.com/signup";
+config.socket_url = "https://kopi-socket-server.herokuapp.com/";
 
 module.exports = config;
