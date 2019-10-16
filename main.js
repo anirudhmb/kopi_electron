@@ -47,7 +47,7 @@ function createWindow () {
     skipTaskbar: true,
     resizable: false
   })
-  
+
   //if user is logged in
   if(store.get('isAuthenticated') == 'true'){
       console.log('already logged in');
@@ -57,11 +57,6 @@ function createWindow () {
       console.log('not logged in');
       win.loadFile('web/login.html');
  }
-
-
-  win.webContents.openDevTools()
-
-  //win.hide()
 
   win.on('closed', () => {
        win = null
